@@ -17,6 +17,43 @@ class App extends React.PureComponent {
     next: false
   };
 
+  setNotification = (type, message, answer = 0) => {
+    if (type === "Success") {
+      this.setState({
+        success:true,
+        message: message,
+        currentAnswer: answer
+      })
+    } else if (type === "Danger") {
+      this.setState({
+        danger: true,
+        message: message,
+        currentAnswer: answer
+      })
+    }
+
+    setTimeout()
+  };
+
+  showNotification = () => {
+    if (this.state.success === true) {
+
+    }
+    else if (this.state.danger === true) {
+
+    } else {
+      
+    }
+  };
+
+  hideNotification = () => {
+    this.setState({
+      success:false,
+      danger:false,
+      message: ""
+    })
+  };
+
   generateNumbers = () => {
     let numArray = [];
     let numLarge = 1;
