@@ -238,6 +238,14 @@ class App extends React.PureComponent {
     }
   };
 
+  clearAnswer = () => {
+    this.setState({
+      answer: {type: "", value: "", openPar: false},
+      activeNums: {numOne: true, numTwo: true, numThree: true, numFour: true, numFive:true, numSix: true}
+    });
+    this.hideNotification();
+  };
+
   renderNext = () => {
 
   }
