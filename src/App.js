@@ -32,7 +32,7 @@ class App extends React.PureComponent {
       })
     }
 
-    setTimeout()
+    setTimeout(this.hideNotification, 5000);
   };
 
   showNotification = () => {
@@ -42,7 +42,7 @@ class App extends React.PureComponent {
     else if (this.state.danger === true) {
 
     } else {
-      
+
     }
   };
 
@@ -103,5 +103,91 @@ class App extends React.PureComponent {
       numbers: numArray,
       target: numSum
     });
+  }
+
+  checkAnswer = () => {
+    let score = 0;
+    let noMatch = false;
+
+    if (this.state.answer.value !== "") {
+      if(this.state.answer.openPar > 0) {
+        this.setNotification("Danger", "You forgot to close a parenthesis.", "");
+      }
+      else {
+        if(this.state.answer.type === "Operator") {
+          this.setNotification("Danger", "This is not a valid equation.", "");
+        }
+        else {
+          let numArray = this.state.numbers;
+          let numExtract = this.state.answer.value.split(" ").map(Number).filter(Boolean);
+          let aNumArray = new Mp([...new Set(numArray)].map(x => [x, numArray.filter(y => y === x).length]));
+
+          for(let i = 0; i < numExtract.length; i++) {
+            if (aNumArray.get(numExtract[i]) > 0 && aNumArray.get(numExtract[i]) <= 2) {
+              aNumArray[numExtract[i]] = aNumArray[numExtract[i]] - 1;
+            }
+            else {
+              noMatch = true;
+            }
+          }
+
+          if (noMatch === false) {
+            let result = Number(eval('(0+(' + this.state.answer.value + '))'));
+            if (isNaN(result) === true) {
+              this.setNotification("Danger", "This is not a valid equation.", "");
+            }
+            else {
+              if (isFinite(result) === false) {
+                result = "";
+                this.setNotification("Danger", "You cannot Divide by Zero.", result);
+              }
+
+              if (result < 0) {
+                result = "";
+                this.setNotification("Danger", "You cannot have Negative Numbers.", result);
+              }
+              else if (result % 1 != 0) {
+                result = "";
+                this.setNotification("Danger", "You cannot have a Decimal.", result);
+              }
+              else {
+                if (result === this.state.target) {
+                  score = 10;
+                  this.updateScore(score);
+                  this.setNotification("Success", "10 Points Added.", result);
+                  this.changeNext();
+                  this.stopTime();
+                }
+                else if (result > this.state.target && result < this.state.target + 10) {
+                  score = result - this.state.target;
+                  score = 10 - score;
+                  this.updateScore(score);
+                  this.setNotification("Success", score + " Points Added.", result);
+                  this.changeNext();
+                  this.stopTime();
+                }
+                else if (result < this.state.target && result > this.state.target - 10) {
+                  score = result - this.state.target;
+                  score = -1 * score;
+                  score = 10 - score;
+                  this.updateScore(score);
+                  this.setNotification("Success", score + " Points Added.", result);
+                  this.changeNext();
+                  this.stopTime();
+                }
+                else {
+                  score = 0;
+                  this.setNofication("Danger", "Wrong Answer. Try Again!", result);
+                }
+              }
+            }
+          } else {
+            this.setNotification("Danger", "You've somehow managed to use numbers outside of this game.", "");
+          }
+        }
+      }
+    } else {
+      this.setNotification("Danger", "Nothing to check.", "");
+    }
   }
 }
