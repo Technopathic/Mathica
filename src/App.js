@@ -246,6 +246,43 @@ class App extends React.PureComponent {
     this.hideNotification();
   };
 
+  updateNum = (index) => {
+    let input = {
+      numOne: this.state.activeNums.numOne, 
+      numTwo: this.state.activeNums.numTwo, 
+      numThree: this.state.activeNums.numThree, 
+      numFour: this.state.activeNums.numFour, 
+      numFive: this.state.activeNums.numFive, 
+      numSix: this.state.activeNums.numSix
+    };
+
+    if (index === 0 && input.numOne === true) {
+      input.numOne = false;
+    }
+    else if (index === 1 && input.numTwo == true) {
+      input.numTwo = false;
+    }
+    else if (index === 2 && input.numThree === true) {
+      input.numThree = false;
+    }
+    else if (index === 3 && input.numFour === true) {
+      input.numFour = false;
+    }
+    else if (index === 4 && input.numFive === true) {
+      input.numFive = false;
+    }
+    else if (index === 5 && input.numSix === true) {
+      input.numSix = false;
+    }
+    else {
+      return false;
+    }
+
+    this.setState({
+      activeNums: input
+    });
+  };
+
   renderNext = () => {
 
   }
