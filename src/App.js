@@ -103,7 +103,7 @@ class App extends React.PureComponent {
       numbers: numArray,
       target: numSum
     });
-  }
+  };
 
   checkAnswer = () => {
     let score = 0;
@@ -189,5 +189,24 @@ class App extends React.PureComponent {
     } else {
       this.setNotification("Danger", "Nothing to check.", "");
     }
-  }
+  };
+
+  newGame = () => {
+    this.setState({
+      score: 0,
+      answer: {type: "", value: "", openPar: false},
+      currentAnswer: 0,
+      activeNums: {numOne: true, numTwo: true, numThree: true, numFour: true, numFive: true, numSix: true},
+      next: false,
+      time: 60
+    });
+    this.generateNumbers();
+    this.hideNotification();
+    this.stopTime();
+    this.startTime();
+  };
+
+
+
+
 }
