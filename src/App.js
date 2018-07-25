@@ -420,5 +420,33 @@ class App extends React.PureComponent {
   renderNext = () => {
 
   };
-  
-}
+
+  render() {
+    return(
+      <div className={container}>
+        <div className={headerLogo}>Mathica</div>
+        <div className={headerContainer}>
+          <div classname={headerLeft}>
+            <div className={targetNumber}>
+              <span>{this.state.target}</span>
+              Get as close to the number as possible.
+            </div>
+          </div>
+        </div>
+        <div className={headerRight}>
+          <div className={headerStats}>
+            <div className={this.setTimerFlash}>Time<span>{this.state.time}</span></div>
+            <div className={scoreContainer}>Score<span>{this.state.score}</span></div>
+            <div className={bestContainer}>Best<span>{this.state.best}</span></div>
+          </div>
+          <div className={headerButtons}>
+            <div onClick={this.newGame} className={this.renderNew()}>New Game</div>
+            {this.renderNext()}
+          </div>
+        </div>
+      </div>
+    );
+  };
+};
+
+export default App;
