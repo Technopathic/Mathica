@@ -283,8 +283,118 @@ class App extends React.PureComponent {
     });
   };
 
+  updateAnswer = (value, type, index = 0) => {
+    if (this.state.timer !== null && this.state.time !== 0) {
+      let input = { type: this.state.answer.type, value: this.state.answer.value, openPar: this.state.answer.openPar };
+      if (this.state.answer.value == '' && type == 'Number') {
+        if(this.updateNum(index) != false) {
+          input.value = value;
+          input.type = type;
+        }
+      }
+      else if (this.state.answer.value === '' && type === 'ParenthesisOpen') {
+        input.value = value;
+        input.type = type;
+        input.openPar = input.openPar + 1;
+      }
+      else if (this.state.answer.value === '' && type === 'Operator') {
+        console.log('Cannot place an Operator at the Beginning.');
+      }
+      else if (this.state.answer.value === '' && type === 'ParenthesisClose') {
+        console.log('Nothing to close.');
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'Number' && type === 'Number') {
+        console.log('Cannot place a Number next to another Number.');
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'Number' && type === 'ParenthesisOpen') {
+        input.value = this.state.answer.value + ' *' + value;
+        input.type = type;
+        input.openPar = input.openPar + 1;
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'Number' && type === 'Operator') {
+        input.value = this.state.answer.value + value;
+        input.type = type;
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'Number' && this.state.answer.openPar != 0 && type === 'ParenthesisClose') {
+        input.value = this.state.answer.value + value;
+        input.type = type;
+        input.openPar = input.openPar - 1;
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'Operator' && type === 'Number') {
+        if (this.updateNum(index) != false) {
+          input.value = this.state.answer.value + value;
+          input.type = type;
+        }
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'Operator' && type === 'Operator') {
+        input.value = input.value.slice(0, -3);
+        input.value = input.value + value;
+        input.type = type;
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'Operator' && type === 'ParenthesisOpen') {
+        input.value = this.state.answer.value + value;
+        input.type = type;
+        input.openPar = input.openPar + 1;
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'Operator' && type === 'ParenthesisClose') {
+        console.log('Cannot place an operator next to another operator.');
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisOpen' && type === 'Number') {
+        if (this.updateNum(index) != false) {
+          input.value = this.state.answer.value + value;
+          input.type = type;
+        }
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisOpen' && type === 'ParenthesisOpen') {
+        input.value = this.state.answer.value + value;
+        input.type = type;
+        input.openPar = input.openPar + 1;
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisOpen' && type === 'Operator') {
+        console.log('Cannot place an operator next to another operator.');
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisOpen' && type === 'ParenthesisClose') {
+        console.log('Cannot place an operator next to another operator.');
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisClose' && type === 'Number') {
+        console.log('Cannot place an operator next to a closing parenthesis.');
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisClose' && type === 'Operator') {
+        input.value = this.state.answer.value + value;
+        input.type = type;
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisClose' && type === 'ParenthesisOpen') {
+        input.value = this.state.answer.value + value;
+        input.type = type;
+        input.openPar = input.openPar + 1;
+      }
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisClose' && this.state.answer.openPar != 0 && type === 'ParenthesisClose') {
+        input.value = this.state.answer.value + value;
+        input.type = type;
+        input.openPar = input.openPar - 1;
+      }
+
+      this.setState({
+        answer: input
+      });
+      
+    }
+  }
+
+  renderTimerFlash = () => {
+
+  };
+
+  renderActive = () => {
+
+  };
+
+  renderNew = () => {
+
+  };
+
   renderNext = () => {
 
-  }
+  };
   
 }
