@@ -206,7 +206,24 @@ class App extends React.PureComponent {
     this.startTime();
   };
 
+  nextGame = () => {
+    this.setState({
+      answer: {type: "", value: "", openPar: false},
+      currentAnswer: 0,
+      activeNums: {numOne: true, numTwo: true, numThree: true, numFour: true, numFive: true, numSix: true},
+      time: 60
+    });
 
+    this.generateNumbers();
+    this.hideNotifications();
+    this.changeNext();
+    this.stopTime();
+    this.startTime();
+  };
 
+  changeNext = () => {
+    this.setState({ next:!this.state.next })
+  };
 
+  
 }
