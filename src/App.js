@@ -225,5 +225,21 @@ class App extends React.PureComponent {
     this.setState({ next:!this.state.next })
   };
 
+  updateScore = (score) => {
+    let newScore = this.state.score + score;
+    this.setState({
+      score: newScore
+    });
+
+    if (newScore > this.state.best) {
+      this.setState({
+        best: newScore
+      });
+    }
+  };
+
+  renderNext = () => {
+
+  }
   
 }
