@@ -377,9 +377,33 @@ class App extends React.PureComponent {
       this.setState({
         answer: input
       });
-      
     }
-  }
+  };
+
+  updateTime = () => {
+    let i = this.state.time;
+    i--;
+    if ( i < 0 ) {
+      this.stopTime();
+    }
+    else {
+      this.setState({
+        time: i
+      });
+      this.startTime();
+    }
+  };
+
+  startTime = () => {
+    this.setState({ timer: setTimeout(this.updateTime, 1000 )});
+  };
+
+  stopTime = () => {
+    clearTimeout(this.state.timer);
+    this.setState({
+      timer:null
+    });
+  };
 
   renderTimerFlash = () => {
 
