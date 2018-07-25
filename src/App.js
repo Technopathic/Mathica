@@ -444,6 +444,18 @@ class App extends React.PureComponent {
             {this.renderNext()}
           </div>
         </div>
+
+        <div className={this.showNotification()}>
+          <div className={notificationLeft}>
+            {this.state.message}
+          </div>
+          <div className={notificationRight}>
+            {this.state.currentAnswer}
+          </div>
+          <div className={clearFix}></div>
+        </div>
+        
+
       </div>
     );
   };
