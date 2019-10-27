@@ -1,4 +1,4 @@
-### Mathica
+![Mathica Logo](https://storage.googleapis.com/castapp-fbe0d.appspot.com/cache/mathica512.png)
 
 [Play Mathica](https://mathica.app)
 
@@ -9,6 +9,9 @@ For the non-Brits in the audience, there's a segment of a daytime game-show wher
 An example: [Youtube: Countdown - The Most Extraordinary Numbers Game Ever?](http://www.youtube.com/watch?v=pfa3MHLLSWI)
 
 A detailed description is given on Wikipedia: [Countdown (Game Show)](https://en.wikipedia.org/wiki/Countdown_%28game_show%29#Numbers_round)
+
+## Screenshot
+![Mathica Screenshot](https://storage.googleapis.com/castapp-fbe0d.appspot.com/cache/mathicaSS.PNG)
 
 ## How does it Work?
 Unlike the game-show, you do not select the size of your integers, rather the program will select them for you. You will have no less than 1 and no more than 4 large numbers, while the rest of the 6 will be numbers from 1 through 10, doubles allowed. Depending on the size of your integers, the target integer is generated ranging from 100 to 1000.
