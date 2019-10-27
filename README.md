@@ -1,4 +1,6 @@
-![Mathica Logo](https://storage.googleapis.com/castapp-fbe0d.appspot.com/cache/mathica512.png)
+<p align="center">
+  <img width="256" height="256" src="https://storage.googleapis.com/castapp-fbe0d.appspot.com/cache/mathica512.png">
+</p>
 
 [Play Mathica](https://mathica.app)
 
