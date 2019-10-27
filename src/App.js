@@ -1,4 +1,29 @@
 import React from 'react';
+import Loadable from 'react-loadable';
+
+import Style from './style.js';
+
+const Privacy = Loadable({
+  loader: () => import('./components/Privacy'),
+  loading() {
+    return <div></div>
+  }
+});
+
+const About = Loadable({
+  loader: () => import('./components/About'),
+  loading() {
+    return <div></div>
+  }
+});
+
+const Share = Loadable({
+  loader: () => import('./components/Share'),
+  loading() {
+    return <div></div>
+  }
+});
+
 
 class App extends React.PureComponent {
   state = {
@@ -14,7 +39,22 @@ class App extends React.PureComponent {
     success: false,
     danger: false,
     message: "",
-    next: false
+    next: false,
+    renderDetails: 0
+  };
+
+  componentDidMount() {
+    if(localStorage.getItem('best') !== null) {
+      this.setState({
+        best:localStorage.getItem('best')
+      })
+    }
+  }
+
+  handleDetails = (num) => {
+    this.setState({
+      renderDetails: num
+    })
   };
 
   setNotification = (type, message, answer = 0) => {
@@ -37,12 +77,18 @@ class App extends React.PureComponent {
 
   showNotification = () => {
     if (this.state.success === true) {
-
+      return (
+        `${Style.notification} ${Style.notificationSuccess}`
+      );
     }
     else if (this.state.danger === true) {
-
+      return (
+        `${Style.notification} ${Style.notificationDanger}`
+      )
     } else {
-
+      return (
+        `${Style.notification}`
+      )
     }
   };
 
@@ -80,8 +126,8 @@ class App extends React.PureComponent {
 
     while(numArray.length < 6) {
       numChoice = Math.floor((Math.random() * 10) + 1);
-      let aNumArray = new Map([...new Set(numArray)].map( x => [x, numArray.filter(y => y === x). length]));
-      if (aNumArray.get(numChoice) != 2) {
+      let aNumArray = new Map([...new Set(numArray)].map( x => [x, numArray.filter(y => y === x).length]));
+      if (aNumArray.get(numChoice) !== 2) {
         numArray.push(numChoice);
       }
     }
@@ -119,8 +165,14 @@ class App extends React.PureComponent {
         }
         else {
           let numArray = this.state.numbers;
-          let numExtract = this.state.answer.value.split(" ").map(Number).filter(Boolean);
-          let aNumArray = new Mp([...new Set(numArray)].map(x => [x, numArray.filter(y => y === x).length]));
+          let numExtract = [];
+          if(!isNaN(this.state.answer.value)) {
+            numExtract.push(this.state.answer.value);
+          }
+          else {
+            numExtract = this.state.answer.value.split(" ").map(Number).filter(Boolean);
+          }
+          let aNumArray = new Map([...new Set(numArray)].map(x => [x, numArray.filter(y => y === x).length]));
 
           for(let i = 0; i < numExtract.length; i++) {
             if (aNumArray.get(numExtract[i]) > 0 && aNumArray.get(numExtract[i]) <= 2) {
@@ -132,7 +184,7 @@ class App extends React.PureComponent {
           }
 
           if (noMatch === false) {
-            let result = Number(eval('(0+(' + this.state.answer.value + '))'));
+            let result = Number(eval(`(0+(${this.state.answer.value}))`));
             if (isNaN(result) === true) {
               this.setNotification("Danger", "This is not a valid equation.", "");
             }
@@ -146,7 +198,7 @@ class App extends React.PureComponent {
                 result = "";
                 this.setNotification("Danger", "You cannot have Negative Numbers.", result);
               }
-              else if (result % 1 != 0) {
+              else if (result % 1 !== 0) {
                 result = "";
                 this.setNotification("Danger", "You cannot have a Decimal.", result);
               }
@@ -162,7 +214,7 @@ class App extends React.PureComponent {
                   score = result - this.state.target;
                   score = 10 - score;
                   this.updateScore(score);
-                  this.setNotification("Success", score + " Points Added.", result);
+                  this.setNotification("Success", `${score} Points Added.`, result);
                   this.changeNext();
                   this.stopTime();
                 }
@@ -171,13 +223,13 @@ class App extends React.PureComponent {
                   score = -1 * score;
                   score = 10 - score;
                   this.updateScore(score);
-                  this.setNotification("Success", score + " Points Added.", result);
+                  this.setNotification("Success", `${score} Points Added.`, result);
                   this.changeNext();
                   this.stopTime();
                 }
                 else {
                   score = 0;
-                  this.setNofication("Danger", "Wrong Answer. Try Again!", result);
+                  this.setNotification("Danger", "Wrong Answer. Try Again!", result);
                 }
               }
             }
@@ -215,7 +267,7 @@ class App extends React.PureComponent {
     });
 
     this.generateNumbers();
-    this.hideNotifications();
+    this.hideNotification();
     this.changeNext();
     this.stopTime();
     this.startTime();
@@ -234,6 +286,8 @@ class App extends React.PureComponent {
     if (newScore > this.state.best) {
       this.setState({
         best: newScore
+      }, () => {
+        localStorage.setItem('best', this.state.best);
       });
     }
   };
@@ -259,7 +313,7 @@ class App extends React.PureComponent {
     if (index === 0 && input.numOne === true) {
       input.numOne = false;
     }
-    else if (index === 1 && input.numTwo == true) {
+    else if (index === 1 && input.numTwo === true) {
       input.numTwo = false;
     }
     else if (index === 2 && input.numThree === true) {
@@ -286,8 +340,8 @@ class App extends React.PureComponent {
   updateAnswer = (value, type, index = 0) => {
     if (this.state.timer !== null && this.state.time !== 0) {
       let input = { type: this.state.answer.type, value: this.state.answer.value, openPar: this.state.answer.openPar };
-      if (this.state.answer.value == '' && type == 'Number') {
-        if(this.updateNum(index) != false) {
+      if (this.state.answer.value === '' && type === 'Number') {
+        if(this.updateNum(index) !== false) {
           input.value = value;
           input.type = type;
         }
@@ -315,13 +369,13 @@ class App extends React.PureComponent {
         input.value = this.state.answer.value + value;
         input.type = type;
       }
-      else if (this.state.answer.value !== '' && this.state.answer.type === 'Number' && this.state.answer.openPar != 0 && type === 'ParenthesisClose') {
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'Number' && this.state.answer.openPar >= 1 && type === 'ParenthesisClose') {
         input.value = this.state.answer.value + value;
         input.type = type;
         input.openPar = input.openPar - 1;
       }
       else if (this.state.answer.value !== '' && this.state.answer.type === 'Operator' && type === 'Number') {
-        if (this.updateNum(index) != false) {
+        if (this.updateNum(index) !== false) {
           input.value = this.state.answer.value + value;
           input.type = type;
         }
@@ -340,7 +394,7 @@ class App extends React.PureComponent {
         console.log('Cannot place an operator next to another operator.');
       }
       else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisOpen' && type === 'Number') {
-        if (this.updateNum(index) != false) {
+        if (this.updateNum(index) !== false) {
           input.value = this.state.answer.value + value;
           input.type = type;
         }
@@ -368,7 +422,7 @@ class App extends React.PureComponent {
         input.type = type;
         input.openPar = input.openPar + 1;
       }
-      else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisClose' && this.state.answer.openPar != 0 && type === 'ParenthesisClose') {
+      else if (this.state.answer.value !== '' && this.state.answer.type === 'ParenthesisClose' && this.state.answer.openPar >= 1 && type === 'ParenthesisClose') {
         input.value = this.state.answer.value + value;
         input.type = type;
         input.openPar = input.openPar - 1;
@@ -405,57 +459,194 @@ class App extends React.PureComponent {
     });
   };
 
-  renderTimerFlash = () => {
-
+  setTimerFlash = () => {
+    if (this.state.time > 10) {
+      return Style.statContainer;
+    } 
+    else if (this.state.time <= 10 && this.state.time > 0) {
+      return (`${Style.statContainer} ${Style.dangerFlash}`);
+    }
+    else if (this.state.time === 0) {
+      return (`${Style.statContainer} ${Style.danger}`);
+    }
   };
 
-  renderActive = () => {
-
+  renderActive = (index) => {
+    if (index === 0 && this.state.activeNums.numOne === false) {
+      return (`${Style.numbersBlock} ${Style.inactiveButton}`);
+    }
+    else if (index === 1 && this.state.activeNums.numTwo === false) {
+      return (`${Style.numbersBlock} ${Style.inactiveButton}`);
+    }
+    else if (index === 2 && this.state.activeNums.numThree === false) {
+      return (`${Style.numbersBlock} ${Style.inactiveButton}`);
+    }
+    else if (index === 3 && this.state.activeNums.numFour === false) {
+      return (`${Style.numbersBlock} ${Style.inactiveButton}`);
+    }
+    else if (index === 4 && this.state.activeNums.numFive === false) {
+      return (`${Style.numbersBlock} ${Style.inactiveButton}`);
+    }
+    else if (index === 5 && this.state.activeNums.numSix === false) {
+      return (`${Style.numbersBlock} ${Style.inactiveButton}`);
+    }
+    else {
+      return Style.numbersBlock;
+    }
   };
 
   renderNew = () => {
-
+    if (this.state.numbers.length === 0 || this.state.time === 0) {
+      return (`${Style.newGame} ${Style.newGameFlash}`);
+    }
+    else {
+      return Style.newGame;
+    }
   };
 
   renderNext = () => {
-
+    if (this.state.next === true && this.state.time !== 0 && this.state.numbers.length !== 0) {
+      return (
+        <div onClick={this.nextGame} className={`${Style.newGame} ${Style.newGameFlash}`}>Next</div>
+      );
+    }
+    else if (this.state.next === false & this.state.time !== 0 && this.state.numbers.length !== 0) {
+      return (
+        <div onClick={this.checkAnswer} className={Style.newGame}>Check</div>
+      );
+    }
+    else if (this.state.time === 0 || this.state.numbers.length === 0) {
+      return (
+        <div className={`${Style.newGame} ${Style.inactiveButton}`}>Check</div>
+      );
+    }
   };
+
+  renderDetails = () => {
+    if(this.state.renderDetails === 1) {
+      return(
+        <About/>
+      )
+    }
+    else if(this.state.renderDetails === 2) {
+      return(
+       <Privacy/>
+      )
+    }
+  }
+
+  renderDetailButtons = () => {
+    if (this.state.renderDetails === 0) {
+      return(
+        <div className={Style.extraContent}>
+          <a href="https://paypal.me/technopathic" target="_blank" rel="noopener noreferrer" className={Style.extraButton}>Buy me Coffee</a>
+          <a href="https://upword.app" target="_blank" rel="noopener noreferrer" className={Style.extraButton}>Upword</a>
+          <div className={Style.extraButton} onClick={() => this.handleDetails(1)}>About</div>
+          <div className={Style.extraButton} onClick={() => this.handleDetails(2)}>Privacy</div>
+        </div>
+      )
+    } else if (this.state.renderDetails === 1) {
+      return(
+        <div className={Style.extraContent}>
+          <a href="https://paypal.me/technopathic" target="_blank" rel="noopener noreferrer" className={Style.extraButton}>Buy me Coffee</a>
+          <a href="https://upword.app" target="_blank" rel="noopener noreferrer" className={Style.extraButton}>Upword</a>
+          <div className={Style.extraButton} onClick={() => this.handleDetails(0)}>Hide About</div>
+          <div className={Style.extraButton} onClick={() => this.handleDetails(2)}>Privacy</div>
+        </div>
+      )
+    } else if (this.state.renderDetails === 2) {
+      return(
+        <div className={Style.extraContent}>
+          <a href="https://paypal.me/technopathic" target="_blank" rel="noopener noreferrer" className={Style.extraButton}>Buy me Coffee</a>
+          <a href="https://upword.app" target="_blank" rel="noopener noreferrer" className={Style.extraButton}>Upword</a>
+          <div className={Style.extraButton} onClick={() => this.handleDetails(1)}>About</div>
+          <div className={Style.extraButton} onClick={() => this.handleDetails(0)}>Hide Privacy</div>
+        </div>
+      )
+    }
+  }
 
   render() {
     return(
-      <div className={container}>
-        <div className={headerLogo}>Mathica</div>
-        <div className={headerContainer}>
-          <div classname={headerLeft}>
-            <div className={targetNumber}>
-              <span>{this.state.target}</span>
-              Get as close to the number as possible.
+      <div className={Style.game}>
+        <div className={Style.wrapperContainer}>
+          <header className={Style.gameHeader}>
+            <h1 className={Style.headerLogo}>Mathica</h1>
+            <div className={Style.headerContainer}>
+              <div className={Style.headerLeft}>
+                <div className={Style.targetNumber}>
+                  <span className={Style.targetContent}>{this.state.target}</span>
+                  Get as close to the number as possible.
+                </div>
+              </div>
+              <div className={Style.headerRight}>
+                <div className={Style.headerStats}>
+                  <div className={this.setTimerFlash()}>Time<span className={Style.statContent}>{this.state.time}</span></div>
+                  <div className={Style.statContainer}>Score<span className={Style.statContent}>{this.state.score}</span></div>
+                  <div className={Style.statContainer}>Best<span className={Style.statContent}>{this.state.best}</span></div>
+                </div>
+                <div className={Style.headerButtons}>
+                  <div onClick={this.newGame} className={this.renderNew()}>New Game</div>
+                  {this.renderNext()}
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <div className={this.showNotification()}>
+            <div>
+              {this.state.message}
+            </div>
+            <div>
+              {this.state.currentAnswer}
             </div>
           </div>
-        </div>
-        <div className={headerRight}>
-          <div className={headerStats}>
-            <div className={this.setTimerFlash}>Time<span>{this.state.time}</span></div>
-            <div className={scoreContainer}>Score<span>{this.state.score}</span></div>
-            <div className={bestContainer}>Best<span>{this.state.best}</span></div>
-          </div>
-          <div className={headerButtons}>
-            <div onClick={this.newGame} className={this.renderNew()}>New Game</div>
-            {this.renderNext()}
-          </div>
-        </div>
 
-        <div className={this.showNotification()}>
-          <div className={notificationLeft}>
-            {this.state.message}
-          </div>
-          <div className={notificationRight}>
-            {this.state.currentAnswer}
-          </div>
-          <div className={clearFix}></div>
-        </div>
-        
+          <main className={Style.mainContainer}>
+            <div className={Style.mainHeader}>
+              <div className={Style.inputContainer}>
+                {this.state.answer.value}
+              </div>
+            </div>
+            <div className={Style.wrapperMain}>
+             
+              <div className={Style.numbersContainer}>
+                {this.state.numbers.map((num, i) => (
+                  <div onClick={() => this.updateAnswer(num, "Number", i)} className={this.renderActive(i)} key={i}>{num}</div>
+                ))}
+              </div>
 
+              <div className={Style.mathOperators}>
+                <div className={Style.mathColumn}>
+                  <div onClick={() => this.updateAnswer(" + ", "Operator")} className={Style.mathBlock}>+</div>
+                  <div onClick={() => this.updateAnswer(" * ", "Operator")} className={Style.mathBlock}>x</div>
+                  <div onClick={() => this.updateAnswer(" ( ", "ParenthesisOpen")} className={Style.mathBlock}>(</div>
+                </div>
+
+                <div className={Style.mathColumn}>
+                  <div onClick={() => this.updateAnswer(" - ", "Operator")} className={Style.mathBlock}>-</div>
+                  <div onClick={() => this.updateAnswer(" / ", "Operator")} className={Style.mathBlock}>/</div>
+                  <div onClick={() => this.updateAnswer(" ) ", "ParenthesisClose")} className={Style.mathBlock}>)</div>
+                </div>
+              </div>
+                
+              <div onClick={this.clearAnswer} className={Style.clearBlock}>Clear</div>
+            </div>
+            <div className={Style.mainFooter}></div>
+          </main>
+
+          <div className={Style.infoBlock}>
+            <span className={Style.infoImportant}>HOW TO PLAY: </span>Use the given numbers to create an equation that is as close (lower or higher) to the target number as possible or equal to it. You do not have to use all of the numbers.
+          </div>
+          <div className={Style.infoBlock}>
+            Made with ❤ in Helsinki. Created by <span className={Style.infoImportant}><a className={Style.infoLink} href="https://twitter.com/Technopathic"  target="_blank" rel="noopener noreferrer">Technopathic</a></span>.
+          </div>
+
+          <Share/>
+
+        </div>
+        {this.renderDetailButtons()}
+        {this.renderDetails()}
       </div>
     );
   };

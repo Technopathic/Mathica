@@ -3,14 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "emotion": "^9.2.6",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4"
+    "react-emotion": "^9.2.6",
+    "react-loadable": "^5.5.0",
+    "react-scripts": "1.1.4",
+    "react-snap": "^1.17.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-scripts eject",
+    "postbuild": "react-snap"
+  },
+  "devDependencies": {
+    "babel-plugin-emotion": "^9.2.6",
+    "react-app-rewire-workbox": "^2.0.1",
+    "react-app-rewired": "^1.5.2",
+    "sw-offline-google-analytics": "0.0.25",
+    "workbox-webpack-plugin": "^3.4.1"
   }
 }
