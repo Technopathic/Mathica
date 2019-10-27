@@ -18,5 +18,8 @@ Similarly to the game-show, you must submit an equation that equals a number tha
 
 Depending on how close you are to the target integer (either upper or lower bound), your score will be calculated by your distance. For example, if you reach the target integer exactly, you will be awarded 10 points. If you are one off, you will be given 9 points, two off will be 8 points, and so on. The upper and lower bounds of the point system are 10, so beyond that you will receive no points. If you use a number in your equation that does not exist in the assigned integers, you will receive no points.
 
+## Technologies
+Mathica is a Progressive Web Application built with ReactJS. I used Emotion for creating CSS-in-JS styled components. Check it out, it's an amazing library. Since this was built with ReactJS 16.4.x, I used React-Loadable to build Lazy-Loadable components. React-Snap was also used to build the Server-Sided Rendered features of Mathica. Your scores are persistently saved with LocalStorage. 
+
 ## Differences from the Game Show
 I would say that my scoring system is a bit more lenient and rewarding. It is this way because there's no guarantee the assigned integers will equate to the target integer (remember, the goal is to get as close as possible). My program also uses 60 seconds instead of 30 seconds because you must submit your answer within that 60 second timeframe to prevent cheating by using more time than allowed. I wanted to make the game a little more fast-paced, so I also omitted the choices of large integer sizes and declaring an answer integer. The amount of large integers is decided based on weighted random generation. My game also lacks Rachel Riley, which is disappointing.
