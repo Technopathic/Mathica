@@ -8,7 +8,7 @@
     "react-dom": "^16.4.1",
     "react-emotion": "^9.2.6",
     "react-loadable": "^5.5.0",
-    "react-scripts": "1.1.4",
+    "react-scripts": "5.0.1",
     "react-snap": "^1.17.0"
   },
   "scripts": {
@@ -19,7 +19,7 @@
     "postbuild": "react-snap"
   },
   "devDependencies": {
-    "babel-plugin-emotion": "^9.2.6",
+    "babel-plugin-emotion": "^9.2.11",
     "react-app-rewire-workbox": "^2.0.1",
     "react-app-rewired": "^1.5.2",
     "sw-offline-google-analytics": "0.0.25",
